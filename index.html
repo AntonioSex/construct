@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AntonPay - Заявка на NFC-метку</title>
-    <meta name="description" content="Безопасное оформление заявки на персональную NFC-метку">
+    <meta name="description" content="Оформление заявки на персональную NFC-метку">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -35,7 +35,7 @@
         header {
             background: white;
             text-align: center;
-            padding: 25px 20px 15px;
+            padding: 25px 20px;
             border-bottom: 1px solid #f1f3f5;
         }
         
@@ -43,7 +43,7 @@
             font-size: 1.8rem;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             letter-spacing: -0.5px;
             background: linear-gradient(90deg, #3498db, #2ecc71);
             -webkit-background-clip: text;
@@ -51,10 +51,9 @@
         }
         
         header h1 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: #343a40;
-            margin-bottom: 5px;
         }
         
         .form-container {
@@ -110,7 +109,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px;
+            padding: 20px;
             border: 2px dashed #e9ecef;
             border-radius: 10px;
             background-color: #f8f9fa;
@@ -125,9 +124,9 @@
         }
         
         .file-upload-label i {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #3498db;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .file-upload-label span {
@@ -142,14 +141,14 @@
         }
         
         .qr-preview img {
-            max-width: 200px;
-            max-height: 200px;
+            max-width: 180px;
+            max-height: 180px;
             border-radius: 8px;
             border: 1px solid #e9ecef;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
-        button[type="submit"] {
+        .submit-btn {
             width: 100%;
             padding: 14px;
             border: none;
@@ -160,46 +159,49 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         
-        button[type="submit"]:hover {
+        .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
         }
         
         .instruction {
             background-color: #f8f9fa;
             border-radius: 10px;
-            padding: 20px;
-            margin: 25px 0;
-            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0 15px;
+            border-left: 3px solid #3498db;
+            font-size: 0.85rem;
         }
         
         .instruction h3 {
             color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .instruction ol {
-            padding-left: 20px;
+            padding-left: 18px;
             color: #495057;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .instruction li {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 6px;
         }
         
         #statusMessage {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
             display: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         .loading {
@@ -218,13 +220,13 @@
         }
         
         .close-btn {
-            margin-top: 10px;
-            padding: 8px 16px;
+            margin-top: 8px;
+            padding: 6px 12px;
             background-color: transparent;
             border: 1px solid currentColor;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
         }
         
@@ -234,22 +236,11 @@
         
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             color: #868e96;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: #f8f9fa;
             border-top: 1px solid #e9ecef;
-        }
-        
-        .security-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-            color: #21AE5E;
-            font-weight: 500;
-            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -258,10 +249,6 @@
         <header>
             <div class="service-name">AntonPay</div>
             <h1>Заявка на личную NFC-метку</h1>
-            <div class="security-badge">
-                <i class="fas fa-shield-alt"></i>
-                <span>Безопасное соединение</span>
-            </div>
         </header>
         
         <div class="form-container">
@@ -290,30 +277,25 @@
                     </div>
                 </div>
                 
-                <button type="submit">
-                    <i class="fas fa-paper-plane"></i> Отправить заявку
-                </button>
+                <div class="instruction">
+                    <h3><i class="fas fa-info-circle"></i> Как получить QR-код:</h3>
+                    <ol>
+                        <li>Т-банк → "Счет"</li>
+                        <li>Раздел "Пополнение"</li>
+                        <li>"QR-код для пополнения"</li>
+                        <li>"Отправить QR-код"</li>
+                        <li>Сохраните изображение</li>
+                    </ol>
+                </div>
+                
+                <button type="submit" class="submit-btn">Отправить заявку</button>
             </form>
-            
-            <div class="instruction">
-                <h3><i class="fas fa-info-circle"></i> Как получить QR-код из Т-банка:</h3>
-                <ol>
-                    <li>Откройте приложение Т-банка</li>
-                    <li>Перейдите в раздел "Счет"</li>
-                    <li>Прокрутите вниз до раздела "Пополнение"</li>
-                    <li>Найдите кнопку "QR-код для пополнения"</li>
-                    <li>Нажмите "Отправить QR-код"</li>
-                    <li>Сохраните изображение в файлы</li>
-                    <li>Загрузите сохраненный файл в форму выше</li>
-                </ol>
-            </div>
             
             <div id="statusMessage"></div>
         </div>
         
         <footer>
-            <p>Все данные защищены по стандарту PCI DSS</p>
-            <p>© 2025 AntonPay. Все права защищены.</p>
+            <p>© 2025 AntonPay</p>
         </footer>
     </div>
 
