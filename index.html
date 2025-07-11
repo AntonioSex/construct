@@ -3,186 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Заявка на личную NFC-метку</title>
+    <title>AntonPay - Заявка на NFC-метку</title>
+    <meta name="description" content="Безопасное оформление заявки на персональную NFC-метку">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            background-color: #f5f5f5;
         }
+        
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
-        h1 {
-            color: #2c3e50;
+        
+        header {
+            background: white;
             text-align: center;
-            margin-bottom: 25px;
+            padding: 25px 20px 15px;
+            border-bottom: 1px solid #f1f3f5;
         }
+        
+        .service-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 5px;
+        }
+        
+        .form-container {
+            padding: 20px;
+        }
+        
         .form-group {
             margin-bottom: 20px;
         }
-        label {
+        
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #495057;
+            font-weight: 500;
         }
-        input[type="text"],
-        input[type="tel"],
-        input[type="file"] {
+        
+        .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
+            padding: 12px 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background-color: #f8f9fa;
         }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            background-color: white;
+        }
+        
+        .file-upload {
+            position: relative;
+            display: block;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
             cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            border: 2px dashed #e9ecef;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .file-upload-label:hover {
+            border-color: #3498db;
+            background-color: #f1f8fe;
+        }
+        
+        .file-upload-label i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-label span {
+            color: #495057;
+            font-size: 0.9rem;
+        }
+        
+        .qr-preview {
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .qr-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        button[type="submit"] {
             width: 100%;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
             margin-top: 10px;
         }
-        button:hover {
-            background-color: #2980b9;
+        
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+        
         .instruction {
             background-color: #f8f9fa;
+            border-radius: 10px;
             padding: 20px;
-            border-radius: 5px;
             margin: 25px 0;
             border-left: 4px solid #3498db;
         }
+        
         .instruction h3 {
-            margin-top: 0;
             color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
         }
+        
         .instruction ol {
             padding-left: 20px;
-            margin-bottom: 0;
+            color: #495057;
+            line-height: 1.6;
         }
+        
         .instruction li {
             margin-bottom: 8px;
+            font-size: 0.9rem;
         }
-        .preview {
-            margin-top: 20px;
-            text-align: center;
-        }
-        #qrPreview {
-            max-width: 200px;
-            max-height: 200px;
-            display: none;
-            margin: 15px auto;
-            border: 1px solid #eee;
-            border-radius: 5px;
-        }
+        
         #statusMessage {
             margin-top: 20px;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             text-align: center;
             display: none;
+            font-size: 0.95rem;
         }
+        
         .loading {
             background-color: #e3f2fd;
             color: #0d47a1;
         }
+        
         .success {
             background-color: #e8f5e9;
             color: #2e7d32;
         }
+        
         .error {
             background-color: #ffebee;
             color: #c62828;
         }
+        
         .close-btn {
             margin-top: 10px;
-            padding: 5px 15px;
+            padding: 8px 16px;
             background-color: transparent;
             border: 1px solid currentColor;
-            border-radius: 3px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
         }
-        .section-title {
-            font-size: 1.2em;
-            color: #3498db;
-            margin: 25px 0 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
+        
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #868e96;
+            font-size: 0.8rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            color: #21AE5E;
+            font-weight: 500;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Заявка на личную NFC-метку</h1>
+        <header>
+            <div class="service-name">AntonPay</div>
+            <h1>Заявка на личную NFC-метку</h1>
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Безопасное соединение</span>
+            </div>
+        </header>
         
-        <div class="section-title">Ваши данные</div>
-        <form id="paymentForm">
-            <div class="form-group">
-                <label for="name">Ваше имя:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Номер телефона:</label>
-                <input type="tel" id="phone" name="phone" required pattern="^[78]\d{10}$" placeholder="79123456789">
-            </div>
-            
-            <div class="form-group">
-                <label for="qrCode">QR-код из Т-банка:</label>
-                <input type="file" id="qrCode" name="qrCode" accept="image/*" required>
-                <div class="preview">
-                    <img id="qrPreview" alt="Предпросмотр QR-кода">
+        <div class="form-container">
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="name">Ваше имя</label>
+                    <input type="text" id="name" name="name" required placeholder="Иван Иванов">
                 </div>
+                
+                <div class="form-group">
+                    <label for="phone">Номер телефона</label>
+                    <input type="tel" id="phone" name="phone" required pattern="^[78]\d{10}$" placeholder="79123456789">
+                </div>
+                
+                <div class="form-group">
+                    <label>QR-код из Т-банка</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Нажмите для загрузки QR-кода</span>
+                            <input type="file" id="qrCode" name="qrCode" accept="image/*" required>
+                        </label>
+                    </div>
+                    <div class="qr-preview" id="qrPreview">
+                        <img id="qrImage" alt="Предпросмотр QR-кода">
+                    </div>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i> Отправить заявку
+                </button>
+            </form>
+            
+            <div class="instruction">
+                <h3><i class="fas fa-info-circle"></i> Как получить QR-код из Т-банка:</h3>
+                <ol>
+                    <li>Откройте приложение Т-банка</li>
+                    <li>Перейдите в раздел "Счет"</li>
+                    <li>Прокрутите вниз до раздела "Пополнение"</li>
+                    <li>Найдите кнопку "QR-код для пополнения"</li>
+                    <li>Нажмите "Отправить QR-код"</li>
+                    <li>Сохраните изображение в файлы</li>
+                    <li>Загрузите сохраненный файл в форму выше</li>
+                </ol>
             </div>
             
-            <button type="submit">Отправить данные</button>
-        </form>
-
-        <div class="section-title">Инструкция по получению QR-кода</div>
-        <div class="instruction">
-            <h3>Как получить QR-код из Т-банка:</h3>
-            <ol>
-                <li>Откройте приложение Т-банка</li>
-                <li>Перейдите в раздел "Счет"</li>
-                <li>Прокрутите вниз до раздела "Пополнение"</li>
-                <li>Найдите кнопку "QR-код для пополнения"</li>
-                <li>Нажмите "Отправить QR-код"</li>
-                <li>Сохраните изображение в файлы</li>
-                <li>Загрузите сохраненный файл в форму выше</li>
-            </ol>
+            <div id="statusMessage"></div>
         </div>
-
-        <div id="statusMessage"></div>
+        
+        <footer>
+            <p>Все данные защищены по стандарту PCI DSS</p>
+            <p>© 2025 AntonPay. Все права защищены.</p>
+        </footer>
     </div>
 
     <script>
         // Превью QR-кода
         document.getElementById('qrCode').addEventListener('change', function(e) {
             const file = e.target.files[0];
+            const preview = document.getElementById('qrPreview');
+            const img = document.getElementById('qrImage');
+            
             if (file) {
                 if (file.size > 2 * 1024 * 1024) {
                     alert('Размер файла не должен превышать 2MB');
                     e.target.value = '';
+                    preview.style.display = 'none';
                     return;
                 }
                 
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    const img = document.getElementById('qrPreview');
                     img.src = event.target.result;
-                    img.style.display = 'block';
+                    preview.style.display = 'block';
                 }
                 reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
             }
         });
 
@@ -198,7 +355,7 @@
             // Показываем статус отправки
             statusMessage.style.display = 'block';
             statusMessage.className = 'loading';
-            statusMessage.innerHTML = 'Отправка данных...';
+            statusMessage.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка данных...';
 
             try {
                 // Проверка данных
@@ -223,7 +380,7 @@
                 if (result.ok) {
                     statusMessage.className = 'success';
                     statusMessage.innerHTML = `
-                        <div>Данные успешно отправлены!</div>
+                        <div><i class="fas fa-check-circle"></i> Данные успешно отправлены!</div>
                         <button class="close-btn" onclick="this.parentElement.style.display='none'">Закрыть</button>
                     `;
                     // Очищаем форму
@@ -243,7 +400,7 @@
                 }
                 
                 statusMessage.innerHTML = `
-                    <div>Ошибка: ${errorMessage.replace(/</g, "&lt;")}</div>
+                    <div><i class="fas fa-exclamation-circle"></i> Ошибка: ${errorMessage.replace(/</g, "&lt;")}</div>
                     <button class="close-btn" onclick="this.parentElement.style.display='none'">Понятно</button>
                 `;
             }
